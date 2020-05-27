@@ -24,10 +24,11 @@ describe CustomersController do
       end
     end
 
-    it "returns an empty array if no customers exist" do
+    it "returns an empty array and status 200 if no customers exist" do
       Customer.destroy_all
 
       get customers_path
+      must_respond_with :ok
 
       body = JSON.parse(response.body)
 
