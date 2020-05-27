@@ -30,6 +30,7 @@ describe VideosController do
 
     body = JSON.parse(response.body)
 
+    must_respond_with :success
     expect(body).must_be_instance_of Array
     expect(body.length).must_equal 0
   end
