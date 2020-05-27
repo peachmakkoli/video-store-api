@@ -1,0 +1,18 @@
+inception:
+  title: Inception
+  overview: A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.
+  release_date: 2010-07-13
+  total_inventory: 5
+  available_inventory: 5
+sunshine:
+  title: Eternal Sunshine of the Spotless Mind
+  overview: A sci-fi romantic drama film that follows an estranged couple who have erased each other from their memories.
+  release_date: 2004-03-19
+  total_inventory: 7
+  available_inventory: 7
+grand_budapest:
+  title: The Grand Budapest Hotel
+  overview: The Grand Budapest Hotel is a 2014 comedy-drama film written and directed by Wes Anderson, which explores tragedy, war, fascism, nostalgia, friendship, and loyalty. Ralph Fiennes leads a seventeen-actor ensemble cast as Monsieur Gustave H., famed concierge of a mountainside resort in the Republic of Zubrowka.
+  release_date: 2014-03-28
+  total_inventory: 9
+  available_inventory: 9
