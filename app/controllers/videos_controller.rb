@@ -7,5 +7,13 @@ class VideosController < ApplicationController
   end
 
   def show
+    video = Video.find_by(id: params[:id])
+
+    if !video
+      render json: {
+        ok: false,
+        message: "Not found"
+      }, status: :not_found
+    end
   end
 end
