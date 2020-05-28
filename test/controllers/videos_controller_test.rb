@@ -49,8 +49,8 @@ describe VideosController do
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
 
-      expect(body['ok']).must_equal false
-      expect(body['message']).must_equal 'Not found'
+      expect(body['errors']).must_be_instance_of Array
+      expect(body['errors'].first).must_equal 'Not Found'
     end
   end
 

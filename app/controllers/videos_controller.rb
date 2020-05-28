@@ -11,8 +11,7 @@ class VideosController < ApplicationController
 
     if !video
       render json: {
-        ok: false,
-        message: "Not found"
+        errors: ['Not Found']
       }, status: :not_found
       return
     end
@@ -20,7 +19,7 @@ class VideosController < ApplicationController
     render json: video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory]),
                                status: :ok
   end
-  
+
   def create
     video = Video.new(video_params)
 
