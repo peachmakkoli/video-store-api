@@ -57,12 +57,11 @@ describe VideosController do
   describe "create" do
     let(:video_data) {
       {
-        video: {
-          title: "Run for Dream",
-          overview: "Chen Yen-Po is a famous Taiwanese ultra-marathon athlete, who became the first ever Asian athlete to complete the 4 Deserts Race Series and achieved the title of World Champion, in 2016. The documentary 'Run for Dream' records Chen Yen-Po’s exciting yet treacherous ten-year journey to become the champion.",
-          release_date: "2019-05-27",
-          available_inventory: 2
-        }
+        title: "Run for Dream",
+        overview: "Chen Yen-Po is a famous Taiwanese ultra-marathon athlete, who became the first ever Asian athlete to complete the 4 Deserts Race Series and achieved the title of World Champion, in 2016. The documentary 'Run for Dream' records Chen Yen-Po’s exciting yet treacherous ten-year journey to become the champion.",
+        release_date: "2019-05-27",
+        total_inventory: 2,
+        available_inventory: 2
       }
     }
 
@@ -75,18 +74,11 @@ describe VideosController do
     end
 
     it "will respond with bad_request for invalid data" do
-      # Arrange - using let from above
-      # Our PetsController test should just test generically
-      # for any kind of invalid data, so we will randomly pick
-      # the age attribute to invalidate
-      video_data[:video][:title] = nil
+      video_data[:title] = nil
 
       expect {
-        # Act
         post videos_path, params: video_data
-
-      # Assert
-      }.wont_change "Video.count"
+      }.wont_differ "Video.count"
     
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       expect(body["errors"].keys).must_include "title"
