@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_27_200806) do
+ActiveRecord::Schema.define(version: 2020_05_28_224844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_200806) do
     t.integer "total_inventory"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "available_inventory", default: 0
+    t.integer "available_inventory"
     t.index ["available_inventory"], name: "index_videos_on_available_inventory"
   end
 
