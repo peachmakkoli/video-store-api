@@ -1,47 +1,57 @@
 require "test_helper"
 
 describe VideosController do
-  VIDEO_FIELDS = ["id", "title", "release_date", "available_inventory"].sort
+  VIDEO_INDEX_FIELDS = ["id", "title", "release_date", "available_inventory"].sort
+  VIDEO_SHOW_FIELDS = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
 
-  def check_response(expected_type:, expected_status: :success)
-    must_respond_with expected_status
-    expect(response.header['Content-Type']).must_include 'json'
+  describe "index" do
+    it "must get index" do
+      get videos_path
 
-    body = JSON.parse(response.body)
-    expect(body).must_be_kind_of expected_type
-    return body
-  end
+      check_response(expected_type: Array, expected_status: :success)
+    end
 
-  it "must get index" do
-    get videos_path
+    it "will return all the proper fields for a list of videos" do
+      get videos_path
 
-    must_respond_with :success
-    expect(response.header['Content-Type']).must_include 'json'
-  end
+      body = check_response(expected_type: Array, expected_status: :success)
 
-  it "will return all the proper fields for a list of videos" do
-    get videos_path
+      body.each do |video|
+        expect(video).must_be_instance_of Hash
+        expect(video.keys.sort).must_equal VIDEO_INDEX_FIELDS
+      end
+    end
 
-    body = JSON.parse(response.body)
+    it "returns an empty array if no videos exist" do
+      Video.destroy_all
 
-    expect(body).must_be_instance_of Array
+      get videos_path
 
-    body.each do |video|
-      expect(video).must_be_instance_of Hash
-      expect(video.keys.sort).must_equal VIDEO_FIELDS
+      body = check_response(expected_type: Array, expected_status: :success)
+
+      expect(body.length).must_equal 0
     end
   end
 
-  it "returns an empty array if no videos exist" do
-    Video.destroy_all
+  describe "show" do
+    it "will return a hash with the proper fields for an existing video" do
+      video = videos(:inception)
 
-    get videos_path
+      get video_path(video.id)
 
-    body = JSON.parse(response.body)
+      body = check_response(expected_type: Hash, expected_status: :success)
+      
+      expect(body.keys.sort).must_equal VIDEO_SHOW_FIELDS
+    end
 
-    must_respond_with :success
-    expect(body).must_be_instance_of Array
-    expect(body.length).must_equal 0
+    it "will respond with a 404 status for a non-existent video" do
+      get video_path(-1)
+
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+
+      expect(body['ok']).must_equal false
+      expect(body['message']).must_equal 'Not found'
+    end
   end
 
   describe "create" do
@@ -81,6 +91,5 @@ describe VideosController do
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       expect(body["errors"].keys).must_include "title"
     end
-
   end
 end
