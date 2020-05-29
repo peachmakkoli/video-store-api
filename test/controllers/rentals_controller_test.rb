@@ -11,8 +11,8 @@ describe RentalsController do
 
     let (:rental_data) {
       {
-        customer: @customer,
-        video: @video,
+        customer_id: @customer.id,
+        video_id: @video.id,
       }
     }
     
@@ -31,6 +31,7 @@ describe RentalsController do
 
       check_response(expected_type: Hash, expected_status: :success)
 
+      @customer.reload
       expect(@customer.videos_checked_out_count).must_equal 0
     end
 
@@ -38,7 +39,8 @@ describe RentalsController do
       post check_in_path, params: rental_data
 
       check_response(expected_type: Hash, expected_status: :success)
-
+      
+      @video.reload
       expect(@video.available_inventory).must_equal 5
     end
 
@@ -52,7 +54,7 @@ describe RentalsController do
     end
 
     it "must return detailed errors and a status 404 if the customer does not exist" do
-      rental_data[:customer] = nil
+      rental_data[:customer_id] = nil
       post check_in_path, params: rental_data
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
@@ -62,7 +64,7 @@ describe RentalsController do
     end
 
     it "must return detailed errors and a status 404 if the video does not exist" do
-      rental_data[:video] = nil
+      rental_data[:video_id] = nil
       post check_in_path, params: rental_data
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
