@@ -16,3 +16,9 @@ grand_budapest:
   release_date: 2014-03-28
   total_inventory: 9
   available_inventory: 9
+rested:
+  title: Restful in Seattle
+  overview: When interview week is over and C13 is probably going to get lots of rest
+  release_date: 2020-06-06
+  total_inventory: 48
+  available_inventory: 0
