@@ -83,16 +83,5 @@ describe RentalsController do
       expect(body['errors']).must_be_instance_of Array
       expect(body['errors'].first).must_equal 'Customer does not have any videos checked out'
     end
-
-    it "must return detailed errors and a status 400 if video available_inventory is equal to total_inventory" do
-      @video.update(available_inventory: @video.total_inventory)
-
-      post check_in_path, params: rental_data
-
-      body = check_response(expected_type: Hash, expected_status: :bad_request)
-
-      expect(body['errors']).must_be_instance_of Array
-      expect(body['errors'].first).must_equal 'Available inventory exceeds total inventory for this video'
-    end
   end
 end

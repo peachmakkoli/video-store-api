@@ -16,10 +16,6 @@ class RentalsController < ApplicationController
         errors: ['Customer does not have any videos checked out']
       }, status: :bad_request
       return
-    elsif video.available_inventory >= video.total_inventory
-      render json: {
-        errors: ['Available inventory exceeds total inventory for this video']
-      }, status: :bad_request
     else
       rental.check_in
       customer.reload
