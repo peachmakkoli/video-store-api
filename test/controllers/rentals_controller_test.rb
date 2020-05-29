@@ -72,5 +72,16 @@ describe RentalsController do
       expect(body['errors']).must_be_instance_of Array
       expect(body['errors'].first).must_equal 'Not Found'
     end
+
+    it "must return detailed errors and a status 400 if customer videos_checked_out_count is 0" do
+      @customer.update(videos_checked_out_count: 0)
+
+      post check_in_path, params: rental_data
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+
+      expect(body['errors']).must_be_instance_of Array
+      expect(body['errors'].first).must_equal 'Customer does not have any videos checked out'
+    end
   end
 end
