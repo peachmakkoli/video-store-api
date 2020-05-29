@@ -44,19 +44,31 @@ describe RentalsController do
 
     it "must set the due_date to nil" do
       post check_in_path, params: rental_data
-      rental = Rental.find_by(rental_data)
-
+  
       check_response(expected_type: Hash, expected_status: :success)
 
+      rental = Rental.find_by(rental_data)
       expect(rental.due_date).must_be_nil
     end
 
     it "must return detailed errors and a status 404 if the customer does not exist" do
+      rental_data[:customer] = nil
+      post check_in_path, params: rental_data
 
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+
+      expect(body['errors']).must_be_instance_of Array
+      expect(body['errors'].first).must_equal 'Not Found'
     end
 
     it "must return detailed errors and a status 404 if the video does not exist" do
+      rental_data[:video] = nil
+      post check_in_path, params: rental_data
 
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+
+      expect(body['errors']).must_be_instance_of Array
+      expect(body['errors'].first).must_equal 'Not Found'
     end
   end
 end
