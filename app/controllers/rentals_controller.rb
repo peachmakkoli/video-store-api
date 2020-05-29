@@ -8,9 +8,7 @@ class RentalsController < ApplicationController
       }, status: :not_found
       return
     else
-      Customer.decrement_counter(:videos_checked_out_count, rental.customer_id, touch: true)
-      Video.increment_counter(:available_inventory, rental.video_id, touch: true)
-      rental.update(due_date: nil)
+      rental.check_in
 
       render json: {
                       customer_id: rental.customer_id, 
