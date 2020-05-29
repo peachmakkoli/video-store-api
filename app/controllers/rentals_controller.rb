@@ -6,14 +6,7 @@ class RentalsController < ApplicationController
     customer = Customer.find_by(id: params[:customer_id])
     video = Video.find_by(id: params[:video_id])
     
-    if !customer
-      render json: {
-          errors: ['Not Found']
-        }, status: :not_found
-        return
-    end
-      
-    if !video
+    if !customer || !video
       render json: {
           errors: ['Not Found']
         }, status: :not_found
@@ -54,6 +47,6 @@ class RentalsController < ApplicationController
   private
 
   def rental_params
-    return params.permit(:customer_id, :video_id, :due_date)
+    return params.permit(:customer_id, :video_id)
   end
 end
