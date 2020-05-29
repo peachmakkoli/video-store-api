@@ -1,6 +1,7 @@
 class RentalsController < ApplicationController
   def check_in
     # find rental by customer_id and video_id
+    rental = Rental.find_by(rental_params)
     # if the rental does not exist
     # render json errors: ["Not Found"] and status :not_found
     # return
@@ -8,8 +9,12 @@ class RentalsController < ApplicationController
     # decrement rental.customer videos_checked_out_count
     # increment rental.video available_inventory 
     # set due_date to nil
-    # render json only: customer_id, user_id, and include: customers videos_checked_out_count, and include: videos available_inventory
-    # status ok
+    render json: {
+                    customer_id: rental.customer_id, 
+                    video_id: rental.video_id, 
+                    videos_checked_out_count: rental.customer.videos_checked_out_count, 
+                    available_inventory: rental.video.available_inventory
+                  }, status: :ok
   end
 
   private
