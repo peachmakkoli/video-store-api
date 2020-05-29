@@ -7,6 +7,11 @@ class RentalsController < ApplicationController
         errors: ['Not Found']
       }, status: :not_found
       return
+    elsif rental.customer.videos_checked_out_count < 1
+      render json: {
+        errors: ['Customer does not have any videos checked out']
+      }, status: :bad_request
+      return
     else
       rental.check_in
 
