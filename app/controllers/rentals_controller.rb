@@ -7,21 +7,29 @@ class RentalsController < ApplicationController
         errors: ['Not Found']
       }, status: :not_found
       return
-    elsif rental.customer.videos_checked_out_count < 1
+    end
+    
+    customer = rental.customer
+    video = rental.video
+    if customer.videos_checked_out_count <= 0
       render json: {
         errors: ['Customer does not have any videos checked out']
       }, status: :bad_request
       return
+    elsif video.available_inventory >= video.total_inventory
+      render json: {
+        errors: ['Available inventory exceeds total inventory for this video']
+      }, status: :bad_request
     else
       rental.check_in
-      rental.customer.reload
-      rental.video.reload
+      customer.reload
+      video.reload
 
       render json: {
-                      customer_id: rental.customer_id, 
-                      video_id: rental.video_id, 
-                      videos_checked_out_count: rental.customer.videos_checked_out_count, 
-                      available_inventory: rental.video.available_inventory
+                      customer_id: customer.id, 
+                      video_id: video.id, 
+                      videos_checked_out_count: customer.videos_checked_out_count, 
+                      available_inventory: video.available_inventory
                     }, status: :ok
     end
   end
