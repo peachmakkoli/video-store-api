@@ -14,6 +14,8 @@ class RentalsController < ApplicationController
       return
     else
       rental.check_in
+      rental.customer.reload
+      rental.video.reload
 
       render json: {
                       customer_id: rental.customer_id, 
