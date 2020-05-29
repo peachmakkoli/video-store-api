@@ -21,7 +21,8 @@ class RentalsController < ApplicationController
     end
 
     Rental.check_out(rental.customer_id, rental.video_id)
-    customer.reload
+    # For some reason, we needed to reload the customer and video in order to get the updated counts
+    customer.reload 
     video.reload
 
     rental.due_date = Time.now + 7.days
@@ -42,7 +43,38 @@ class RentalsController < ApplicationController
       return
     end
   end
+  
+  def checkin
+    rental = Rental.find_by(rental_params)
 
+    if !rental
+      render json: {
+        errors: ['Not Found']
+      }, status: :not_found
+      return
+    end
+    
+    customer = rental.customer
+    video = rental.video
+    if customer.videos_checked_out_count <= 0
+      render json: {
+        errors: ['Customer does not have any videos checked out']
+      }, status: :bad_request
+      return
+    else
+      rental.checkin
+      customer.reload
+      video.reload
+
+      render json: {
+        customer_id: customer.id, 
+        video_id: video.id, 
+        videos_checked_out_count: customer.videos_checked_out_count, 
+        available_inventory: video.available_inventory
+      }, status: :ok
+      return
+    end
+  end
 
   private
 

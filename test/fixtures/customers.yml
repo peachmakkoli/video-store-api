@@ -3,7 +3,7 @@ diana:
   registered_at: Date.today
   postal_code: 01337
   phone: (555) 555-5555
-  videos_checked_out_count: 0
+  videos_checked_out_count: 1
 lee:
   name: Lee
   registered_at: Date.today
