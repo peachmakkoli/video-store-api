@@ -4,10 +4,15 @@ describe RentalsController do
   CHECK_IN_FIELDS = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
 
   describe "check_in" do
+    before do
+      @customer = customers(:diana)
+      @video = videos(:inception)
+    end
+
     let (:rental_data) {
       {
-        customer: customers(:lee),
-        video: videos(:inception),
+        customer: @customer,
+        video: @video,
       }
     }
     
@@ -22,15 +27,28 @@ describe RentalsController do
     end
     
     it "must decrement the customer videos_checked_out_count" do
+      post check_in_path, params: rental_data
 
+      check_response(expected_type: Hash, expected_status: :success)
+
+      expect(@customer.videos_checked_out_count).must_equal 0
     end
 
     it "must increment the video available_inventory count" do
+      post check_in_path, params: rental_data
 
+      check_response(expected_type: Hash, expected_status: :success)
+
+      expect(@video.available_inventory).must_equal 5
     end
 
     it "must set the due_date to nil" do
+      post check_in_path, params: rental_data
+      rental = Rental.find_by(rental_data)
 
+      check_response(expected_type: Hash, expected_status: :success)
+
+      expect(rental.due_date).must_be_nil
     end
 
     it "must return detailed errors and a status 404 if the customer does not exist" do
